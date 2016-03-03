@@ -1,0 +1,20 @@
+{
+  "name": "swim",
+  "version": "1.0.0",
+  "description": "Time tracker for a Swedish Open Water Swimming Competition",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "Copyright (c) 2016 Progic AB, All Rights Reserved",
+  "dependencies": {
+    "koa": "^1.1.2",
+    "koa-route": "^2.4.2",
+    "lodash": "^4.5.0",
+    "mysql": "^2.10.2",
+    "react": "^0.14.7",
+    "react-dom": "^0.14.7",
+    "winston": "^2.2.0"
+  }
+}
