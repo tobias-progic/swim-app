@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "Copyright (c) 2016 Progic AB, All Rights Reserved",
+  "author": "Tobias Gasslander",
+  "license": "MIT",
   "dependencies": {
     "babel-preset-react": "^6.5.0",
     "jquery": "^2.2.1",

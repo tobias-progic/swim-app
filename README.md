@@ -1,4 +1,5 @@
 # swim
+**Note: This is work in progress**
 A small `node.js` based promotional back-end project to support an open water swimclub with timing of swimmers at a competition.
 This git contains the server and single-page app. There is also an Android&trade; app involved with this project in another git, TBD.
 
