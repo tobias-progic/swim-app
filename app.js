@@ -11,5 +11,9 @@ logger.level = config.logging.level || 'error'
 logger.info('swim server boot')
 logger.silly(JSON.stringify(config, null, 4))
 
+var static = {
+    root : './client'
+}
 
-var app = api(config, logger)
+var app = api(config, logger, static)
+
