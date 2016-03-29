@@ -7,9 +7,9 @@ var _ = require('koa-route')
 
 // add your routes specifications here
 var routes = {
-    'get /api/1/results': 'ResultsController.get',
-    'get /api/1/results/:id': 'ResultsController.getOne',
-    'put /api/1/results/:id': 'ResultsController.setOne'
+    'get /api/1/participants': 'ResultsController.get',
+    'get /api/1/participants/:id': 'ResultsController.getOne',
+    'put /api/1/participants/:id': 'ResultsController.setOne'
 }
 
 
