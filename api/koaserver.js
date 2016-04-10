@@ -1,25 +1,31 @@
-var koa = require('koa')
-var app = koa()
-var jsonBody = require('koa-json-body')
-var routes = require('./routes')
-var serve = require('koa-static')
+/*
+    File: koaserver.js
+    Desc: Create and setup the koa app
+*/
+"use strict";
+
+const koa = require('koa')
+const app = koa()
+const jsonBody = require('koa-json-body')
+const routes = require('./routes')
+const serve = require('koa-static')
 
 // koa server entry point
-var server = function(config, logger, static) {
+const server = (config, logger, staticServe) => {
 
-    var inject = {config,logger}
+    const inject = {config,logger}
     routes(inject, app)
 
     app.use(jsonBody({ limit: '50kb' }))
 
-    app.on('error', function(err) {
+    app.on('error', (err) => {
         logger.error(err)
     })
 
-    app.use(serve(static.root));
+    app.use(serve(staticServe.root))
 
-    app.listen(config.server.port)
-    logger.silly('server running on', config.server.port)
+    return app
+
 }
 
 module.exports = server
