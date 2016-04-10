@@ -11,9 +11,16 @@ const _ = require('koa-route')
 
 // add your routes specifications here
 const routes = {
-    'get /api/1/participants': 'ResultsController.get',
-    'get /api/1/participants/:id': 'ResultsController.getOne',
-    'put /api/1/participants/:id': 'ResultsController.setOne'
+    'get /api/1/participants': 'ParticipantsController.get',
+    'get /api/1/participants/:id': 'ParticipantsController.getOne',
+    'put /api/1/participants/:id/tag': 'ParticipantsController.setTag',
+    'put /api/1/participants/:id/endtime': 'ParticipantsController.setEndTime',
+    'post /api/1/heat': 'HeatController.createOne',
+    'put /api/1/heat/:id': 'HeatController.setOne',
+    'delete /api/1/heat/:id' : 'HeatController.deleteOne',
+    'get /api/1/heat': 'HeatController.get',
+    'get /api/1/heat/:id': 'HeatController.getOne'
+
 }
 
 
