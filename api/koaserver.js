@@ -15,7 +15,7 @@ const koaLogger = require('koa-logger')
 const server = (config, logger, staticServe) => {
 
     // app.use(bodyParser())
-    // app.use(jsonBody({ limit: '500kb' }))
+    app.use(jsonBody({ limit: '500kb' }))
     app.use(koaLogger())
 
     const inject = {config,logger}
