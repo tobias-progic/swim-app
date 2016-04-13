@@ -18,7 +18,10 @@ const routes = {
     // 'post /api/1/heat': 'HeatController.createOne',
     // 'put /api/1/heat/:id': 'HeatController.setOne',
     // 'delete /api/1/heat/:id' : 'HeatController.deleteOne',
-    'get /api/1/heats': 'HeatController.get'
+    'get /api/1/heats': 'HeatController.get',
+    'post /api/1/heats': 'HeatController.post',
+    'delete /api/1/heats/:id': 'HeatController.remove'
+    // 'put /api/1/heats/:id': 'HeatController.put'
 }
 
 

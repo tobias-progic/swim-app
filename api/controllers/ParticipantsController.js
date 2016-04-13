@@ -27,13 +27,14 @@ const init = (common) => {
 }
 
 const getResults = function*() {
-    const sql = 'select firstname, lastname, start_nbr as startNbr, heat as heatNbr, end_time as endTime, tag_nbr as tagNbr from user join heat on user.heat_id = heat.id;'
+    const sql = 'select user.id, firstname, lastname, start_nbr as startNbr, heat as heatNbr, end_time as endTime, tag_nbr as tagNbr from user join heat on user.heat_id = heat.id;'
     let res = yield queryDatabase(sql)
     this.set('Content-Type', 'application/json')
     this.body = JSON.stringify(res, null, 4)
 }
 
 const getResultFor = function*(id) {
+    logger.silly('getResultFor', id)
     let res
     if (!isNumeric(id)) {
         logger.silly('id is not a number')
@@ -41,13 +42,14 @@ const getResultFor = function*(id) {
         this.body = {}
         return
     }
-    const sql = `select firstname, lastname, start_nbr as startNbr, heat as heatNbr, end_time as endTime, tag_nbr as tagNbr from user join heat on user.heat_id = heat.id where user.id = ${id};`
+    const sql = `select user.id, firstname, lastname, start_nbr as startNbr, heat as heatNbr, end_time as endTime, tag_nbr as tagNbr from user join heat on user.heat_id = heat.id where user.id = ${id};`
     res = yield queryDatabase(sql)
     this.set('Content-Type', 'application/json')
     this.body = JSON.stringify(res[0], null, 4)
 }
 
 const setFinishedAtFor = function*(id) {
+    logger.silly('setTagFor')
     if (!isNumeric(id)) {
         logger.silly('id is not a number')
         this.response = 400
@@ -57,44 +59,31 @@ const setFinishedAtFor = function*(id) {
 
     let finishedAt = this.request.query.finishedAt
 
-    if (!isNumeric(finishedAt)) {
-        logger.silly('finishedAt is not a number')
-        this.response = 400
-        this.body = {}
-        return
-    }
-
     let sql = `update user set end_time = '${finishedAt}' where id = ${id}`
     logger.silly(sql)
     yield queryDatabase(sql)
-    sql = `select firstname, lastname, start_nbr as startNbr, heat as heatNbr, end_time as endTime, tag_nbr as tagNbr from user join heat on user.heat_id = heat.id where user.id = ${id};`
+    sql = `select user.id, firstname, lastname, start_nbr as startNbr, heat as heatNbr, end_time as endTime, tag_nbr as tagNbr from user join heat on user.heat_id = heat.id where user.id = ${id};`
     let res = yield (queryDatabase(sql))
     this.set('Content-Type', 'application/json')
-    this.body = JSON.stringify(res, null, 4)
+    this.body = JSON.stringify({finishedAt: finishedAt}, null, 4)
 }
 
 const setTagFor = function*(id) {
+    logger.silly('setTagFor')
     if (!isNumeric(id)) {
         logger.silly('id is not a number')
         this.response = 400
         this.body = {}
         return
     }
-
     let tag = this.request.query.tag
-
-    if (!isNumeric(tag)) {
-        logger.silly('tag is not a number')
-        this.response = 400
-        this.body = {}
-        return
-    }
 
     let sql = `update user set tag_nbr = '${tag}' where id = ${id}`
     logger.silly(sql)
-    yield queryDatabase(sql)
-    sql = `select firstname, lastname, start_nbr as startNbr, heat as heatNbr, end_time as endTime, tag_nbr as tagNbr from user join heat on user.heat_id = heat.id where user.id = ${id};`
-    let res = yield (queryDatabase(sql))
+
+    let res = yield queryDatabase(sql)
+    sql = `select user.id, firstname, lastname, start_nbr as startNbr, heat as heatNbr, end_time as endTime, tag_nbr as tagNbr from user join heat on user.heat_id = heat.id where user.id = ${id};`
+    res = yield queryDatabase(sql)
     this.set('Content-Type', 'application/json')
     this.body = JSON.stringify(res, null, 4)
 }

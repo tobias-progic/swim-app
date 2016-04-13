@@ -9,14 +9,17 @@ const app = koa()
 const jsonBody = require('koa-json-body')
 const routes = require('./routes')
 const serve = require('koa-static')
+const koaLogger = require('koa-logger')
 
 // koa server entry point
 const server = (config, logger, staticServe) => {
 
+    // app.use(bodyParser())
+    // app.use(jsonBody({ limit: '500kb' }))
+    app.use(koaLogger())
+
     const inject = {config,logger}
     routes(inject, app)
-
-    app.use(jsonBody({ limit: '50kb' }))
 
     app.on('error', (err) => {
         logger.error(err)
