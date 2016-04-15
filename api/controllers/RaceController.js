@@ -61,11 +61,15 @@ const setup = function*(id) {
 }
 
 const reset = function*(id) {
-    const sql = `UPDATE race SET \`basetime\` = NULL, \`heat1\` = NULL, \`heat2\` = NULL, \`heat3\` = NULL WHERE id = ${id}`
-    const res = yield queryDatabase(sql)
+    let sql = `UPDATE race SET \`basetime\` = NULL, \`heat1\` = NULL, \`heat2\` = NULL, \`heat3\` = NULL WHERE id = ${id}`
+    let res = yield queryDatabase(sql)
+    let ok = (res.affectedRows && res.affectedRows != 0)
+    sql = `UPDATE user SET \`tag_nbr\` = NULL, \`end_time\` = NULL WHERE 1`
+    res = yield queryDatabase(sql)
+    ok &= (res.affectedRows && res.affectedRows != 0)
     this.set('Content-Type', 'application/json')
     // this.body = JSON.stringify(res, null, 4)
-    this.status = (res.affectedRows && res.affectedRows != 0) ? 200 : 404
+    this.status = (ok != 0) ? 200 : 404
 }
 
 /*
