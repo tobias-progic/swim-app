@@ -24,7 +24,8 @@ const init = (common) => {
     return {
         get: getAll,
         setup: setup,
-        reset: reset
+        reset: reset,
+        finishRace: setFinished
     }
 }
 
@@ -55,7 +56,8 @@ const setup = function*(id) {
     let res = yield queryDatabase(sql)
     this.set('Content-Type', 'application/json')
     this.body = JSON.stringify({msg: "updated race", id: res.insertId}, null, 4);
-    this.status = (res.insertId && res.insertId > 0) ? 200 : 400
+    console.log(res);
+    this.status = (res.affectedRows && res.affectedRows !== 0) ? 200 : 400
 
 
 }
@@ -69,6 +71,14 @@ const reset = function*(id) {
     ok &= (res.affectedRows && res.affectedRows != 0)
     this.set('Content-Type', 'application/json')
     // this.body = JSON.stringify(res, null, 4)
+    this.status = (ok != 0) ? 200 : 404
+}
+
+const setFinished = function*(id) {
+    let sql = `UPDATE race SET \`finished\` = 1 WHERE id = ${id}`
+    let res = yield queryDatabase(sql)
+    let ok = (res.affectedRows && res.affectedRows != 0)
+    this.set('Content-Type', 'application/json')
     this.status = (ok != 0) ? 200 : 404
 }
 

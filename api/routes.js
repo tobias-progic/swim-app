@@ -17,6 +17,7 @@ const routes = {
     'put /api/1/participants/:id/endtime': 'ParticipantsController.setEndTime',
     'get /api/1/races': 'RaceController.get',
     'put /api/1/races/:id': 'RaceController.setup',
+    'put /api/1/races/:id/finished': 'RaceController.finishRace',
     'delete /api/1/races/:id': 'RaceController.reset'
 }
 
