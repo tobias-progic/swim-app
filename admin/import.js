@@ -7,7 +7,7 @@ var parser = parse({delimiter: ';'}, function(err, data) {
         return {
             email: participant[0],
             name: participant[3],
-            klass: participant[12],
+            competitionClass: participant[12],
             gender: participant[13]
         }
     });
