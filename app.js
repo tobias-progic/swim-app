@@ -23,7 +23,10 @@ const app = api(config, logger, staticServe)
 app.listen(config.server.port)
 logger.silly('server running on', config.server.port)
 
-
-module.exports = {
-    app: api(config, logger, staticServe)
-}
+module.exports = app
+// module.exports = {
+//     app: () => {
+//         api(config, logger, staticServe)
+//         return this
+//     }
+// }
