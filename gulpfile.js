@@ -4,6 +4,9 @@ const gulp = require('gulp')
 const mocha = require('gulp-mocha')
 const webpack = require('gulp-webpack')
 const nodemon = require('gulp-nodemon')
+const argv = require('yargs').argv
+
+const standardFiles = ['client/**/*.js', 'client/**/*.jsx', 'api/**/*.js', 'gulpfile.js']
 
 gulp.task('nodemon', function() {
   nodemon({
@@ -18,7 +21,7 @@ gulp.task('webpack', () => {
     .pipe(gulp.dest('client/dist/'));
 });
 
-gulp.task('test', () => {
+gulp.task('testSuite', () => {
     return gulp
     .src('api/test/*.spec.js')
     .pipe(mocha())
@@ -28,6 +31,10 @@ gulp.task('test', () => {
 gulp.task('dev', ['webpack'], () => {
     const client = ['webpack']
     gulp.watch(['client/**/*.js', 'client/**/*.jsx'], client)
+})
+
+gulp.task('test', ['testSuite'], () => {
+    gulp.watch(standardFiles, 'testSuite')
 })
 
 gulp.task('default', ['test', 'webpack', 'nodemon'], () => {

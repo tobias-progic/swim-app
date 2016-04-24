@@ -17,15 +17,16 @@ const app = require('../../app.js')
 console.log(app);
 
 // const request = require('supertest').agent(app.listen()) //Gulp errors here: "app.listen is not a function" ?
+const request = require('supertest').agent(app)
 
 describe('GET - results', () => {
 
     it('should return a number of participants', () => {
-        // request
-        // .get('/api/1/paricipants')
-        // .expect(200)
-        // .end();
-        assert(false)
+        request
+        .get('/api/1/paricipants')
+        .expect(200)
+        .end();
+        // assert(false)
     })
 
 })
