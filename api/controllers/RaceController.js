@@ -38,8 +38,6 @@ const getAll = function*() {
 
 const setup = function*(id) {
 
-
-
     const basetime = this.request.body.basetime || undefined
     const heat1 = this.request.body.heat1 || undefined
     const heat2 = this.request.body.heat2 || undefined
@@ -50,7 +48,7 @@ const setup = function*(id) {
     if (basetime === undefined) {
         sql = `UPDATE race SET \`heat1\` = '${heat1}', \`heat2\` = '${heat2}', \`heat3\` = '${heat3}' WHERE id = ${id};`
     } else {
-        sql = `UPDATE race SET \`basetime\` = '${basetime}' WHERE id = ${id};`
+        sql = `UPDATE race SET \`basetime\` = '${basetime}', \`finished\` = 0 WHERE id = ${id};`
     }
 
     let res = yield queryDatabase(sql)

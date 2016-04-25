@@ -15,7 +15,7 @@ logger.info('swim server boot')
 logger.silly(JSON.stringify(config, null, 4))
 
 const staticServe = {
-    root : './client'
+    root : './client/dist'
 }
 
 const app = api(config, logger, staticServe)
