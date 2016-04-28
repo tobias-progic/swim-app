@@ -24,7 +24,7 @@ const init = (common) => {
 }
 
 const getAll = function*() {
-    const sql = 'SELECT * FROM user WHERE 1;'
+    const sql = 'SELECT * FROM user WHERE end_time <> -1;'
     let users = yield queryDatabase(sql)
     let races = yield queryDatabase('SELECT * FROM race WHERE 1;')
 
@@ -40,7 +40,7 @@ const getAll = function*() {
             startNbr: user.start_nbr,
             firstname: user.firstname,
             lastname: user.lastname,
-            endTime: user.end_time - timeOffsets[user.heat_nbr],
+            endTime: user.end_time - timeOffsets[user.heat_id],
             gender: user.gender
         }
     }).reduce((res, user) => {
