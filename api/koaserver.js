@@ -16,9 +16,11 @@ const cors = require('kcors')
 const server = (config, logger, staticServe) => {
 
     // app.use(bodyParser())
+    app.use(cors({
+        origin: '*'
+    }))
     app.use(jsonBody({ limit: '500kb' }))
     app.use(koaLogger())
-    app.use(cors())
 
     const inject = {config,logger}
     routes(inject, app)

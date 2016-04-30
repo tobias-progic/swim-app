@@ -22,10 +22,15 @@ gulp.task('webpack', () => {
     .pipe(gulp.dest('client/dist/'));
 });
 
-gulp.task('test', () => {
+gulp.task('testsuite', () => {
     return gulp
     .src('api/test/*.spec.js')
     .pipe(mocha())
+})
+
+gulp.task('test', ['testsuite'], () => {
+    const testsuite = ['testsuite']
+    gulp.watch(['**/*.js'], testsuite)
 })
 
 gulp.task('dev', ['webpack'], () => {
