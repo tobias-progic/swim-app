@@ -30,9 +30,9 @@ const getAll = function*() {
 
     let timeOffsets = {
         basetime: races[0].basetime,
-        heat1: races[0].heat1,
-        heat2: races[0].heat2,
-        heat3: races[0].heat3
+        '1': races[0].heat1,
+        '2': races[0].heat2,
+        '3': races[0].heat3
     }
 
     let results = users.map( (user) => {
@@ -40,7 +40,8 @@ const getAll = function*() {
             startNbr: user.start_nbr,
             firstname: user.firstname,
             lastname: user.lastname,
-            endTime: user.end_time - timeOffsets[user.heat_id],
+            endTime: user.end_time,
+            netTime: timeOffsets[user.heat_id] - user.end_time,
             gender: user.gender
         }
     }).reduce((res, user) => {
