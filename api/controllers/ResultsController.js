@@ -41,7 +41,7 @@ const getAll = function*() {
             firstname: user.firstname,
             lastname: user.lastname,
             endTime: user.end_time,
-            netTime: timeOffsets[user.heat_id] - user.end_time,
+            netTime: user.end_time - timeOffsets[user.heat_id],
             gender: user.gender
         }
     }).reduce((res, user) => {
