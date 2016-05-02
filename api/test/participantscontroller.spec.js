@@ -87,6 +87,42 @@ describe('PUT - participants', () => {
         })
     })
 
+    it('should update a participants tagNbr', (done) => {
+
+        participant1.tagNbr = 89;
+
+        request
+        .put('/api/1/participants/1')
+        .send(participant1)
+        .expect(200)
+        .end((err,res) => {
+            if(!!err) {
+                done(err)
+            }
+            res.should.have.property('body')
+            res.body[0].should.have.property('tagNbr', '89')
+            done()
+        })
+    })
+
+    it('should update a participants tagNbr', (done) => {
+
+        participant1.tagNbr = 89;
+
+        request
+        .put('/api/1/participants/1')
+        .send({"tagNbr": "89"})
+        .expect(200)
+        .end((err,res) => {
+            if(!!err) {
+                done(err)
+            }
+            res.should.have.property('body')
+            res.body[0].should.have.property('tagNbr', '89')
+            done()
+        })
+    })
+
 })
 
 

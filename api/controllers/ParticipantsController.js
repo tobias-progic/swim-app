@@ -105,12 +105,6 @@ const update = function*(id) {
         return
     }
 
-    if (!this.request.body.id) {
-        logger.silly('body does not have an id')
-        this.response = 400
-        return
-    }
-
     // console.log('body', this.request.body)
 
     let sql = "update user " + dbUtil.objectToSql(this.request.body) + ` where id = ${id}`;
