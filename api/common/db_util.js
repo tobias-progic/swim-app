@@ -23,9 +23,9 @@ const setup = function() {
     db = connection
 }
 
-const getFromDatabase = function(sql) {
+const getFromDatabase = (sql) => {
 
-    return new Promise(function(resolve, reject) {
+    return new Promise((resolve, reject) => {
 
         setup()
 
@@ -43,6 +43,34 @@ const getFromDatabase = function(sql) {
     })
 }
 
+const snakeToCamel = (s) => {
+
+    return s.replace(/_\w/g, (m) => {return m[1].toUpperCase()})
+}
+
+const camelToSnake = (s) => {
+
+    return s.replace(/([A-Z])/g, (c) => {return "_" + c.toLowerCase()})
+
+}
+
+const objectToSql = (o, table) => {
+    let set = Object.keys(o).map( (v) => {
+
+        if (v === 'heatNbr') {
+            v = 'heatId'
+            return ` ${camelToSnake(v)} = '${o['heatNbr']}'`
+        } else {
+            return ` ${camelToSnake(v)} = '${o[v]}'`
+        }
+    })
+    .reduce((c,p) => {
+        return c += p + ","
+    }, "set")
+
+    return set.substr(0, set.length-1);
+}
+
 module.exports = {
     create: (conf, log) => {
         config = conf
@@ -50,5 +78,6 @@ module.exports = {
 
         return getFromDatabase
 
-    }
+    },
+    objectToSql: objectToSql
 }

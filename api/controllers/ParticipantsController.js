@@ -6,6 +6,7 @@
 "use strict";
 
 const moment = require('moment')
+const dbUtil = require('../common/db_util')
 let queryDatabase
 
 function getSqlUserObj(id) {
@@ -21,13 +22,15 @@ const init = (common) => {
     let config = common.config
     logger = common.logger
 
-    queryDatabase = require('../common/db_util').create(config, logger)
+
+    queryDatabase = dbUtil.create(config, logger)
 
     return {
         get: getResults,
         getOne: getResultFor,
         setEndTime: setFinishedAtFor,
-        setTag: setTagFor
+        setTag: setTagFor,
+        update: update
     }
 }
 
@@ -55,7 +58,7 @@ const getResultFor = function*(id) {
 }
 
 const setFinishedAtFor = function*(id) {
-    logger.silly('setTagFor')
+    logger.silly('setFinishedAtFor')
     if (!isNumeric(id)) {
         logger.silly('id is not a number')
         this.response = 400
@@ -86,6 +89,33 @@ const setTagFor = function*(id) {
 
     let sql = `update user set tag_nbr = '${tag}' where id = ${id}`
     logger.silly(sql)
+
+    let res = yield queryDatabase(sql)
+    res = yield queryDatabase(getSqlUserObj(id))
+    this.set('Content-Type', 'application/json')
+    this.body = JSON.stringify(res, null, 4)
+}
+
+const update = function*(id) {
+    logger.silly('update')
+    if (!isNumeric(id)) {
+        logger.silly('id is not a number')
+        this.response = 400
+        this.body = {}
+        return
+    }
+
+    if (!this.request.body.id) {
+        logger.silly('body does not have an id')
+        this.response = 400
+        return
+    }
+
+    // console.log('body', this.request.body)
+
+    let sql = "update user " + dbUtil.objectToSql(this.request.body) + ` where id = ${id}`;
+
+    // console.log('*** sql', sql)
 
     let res = yield queryDatabase(sql)
     res = yield queryDatabase(getSqlUserObj(id))

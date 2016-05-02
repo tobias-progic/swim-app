@@ -29,8 +29,8 @@ gulp.task('testsuite', () => {
 })
 
 gulp.task('test', ['testsuite'], () => {
-    const testsuite = ['testsuite']
-    gulp.watch(['**/*.js'], testsuite)
+    // const testsuite = ['testsuite']
+    // gulp.watch(['**/*.js'], testsuite)
 })
 
 gulp.task('dev', ['webpack'], () => {
