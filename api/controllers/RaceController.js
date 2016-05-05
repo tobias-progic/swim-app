@@ -61,10 +61,22 @@ const setup = function*(id) {
 }
 
 const reset = function*(id) {
+
+    let keepTags = this.request.query.tags === 'keep'
+
+    logger.silly('keepTags', keepTags)
+
     let sql = `UPDATE race SET \`basetime\` = NULL, \`heat1\` = NULL, \`heat2\` = NULL, \`heat3\` = NULL, \`finished\` = 0 WHERE id = ${id}`
     let res = yield queryDatabase(sql)
     let ok = (res.affectedRows && res.affectedRows != 0)
+
     sql = `UPDATE user SET \`tag_nbr\` = NULL, \`end_time\` = NULL WHERE 1`
+
+    if (keepTags) {
+        sql = `UPDATE user \`end_time\` = NULL WHERE 1`
+    }
+
+
     res = yield queryDatabase(sql)
     ok &= (res.affectedRows && res.affectedRows != 0)
     this.set('Content-Type', 'application/json')
