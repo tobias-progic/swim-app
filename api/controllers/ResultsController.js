@@ -1,6 +1,8 @@
 "use strict"
 
 const moment = require('moment')
+const Excel = require('exceljs')
+const fs = require('fs')
 let queryDatabase
 
 function getSqlUserObj(id) {
@@ -10,6 +12,7 @@ function getSqlUserObj(id) {
 
 let db
 let logger
+const EXCEL_FILE_SUFFIX = 'xlsx'
 
 const init = (common) => {
 
@@ -19,11 +22,19 @@ const init = (common) => {
     queryDatabase = require('../common/db_util').create(config, logger)
 
     return {
-        get: getAll
+        get: getAll,
+        getExcel: getExcel
     }
 }
 
-const getAll = function*() {
+const getExcel = function*() {
+
+    logger.silly('getExcel')
+    this.set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    this.body = yield getAll(EXCEL_FILE_SUFFIX)
+}
+
+const getAll = function*(responseType) {
     const sql = 'SELECT * FROM user WHERE end_time <> -1;'
     let users = yield queryDatabase(sql)
     let races = yield queryDatabase('SELECT * FROM race WHERE 1;')
@@ -45,7 +56,6 @@ const getAll = function*() {
             gender: user.gender
         }
     }).reduce((res, user) => {
-        console.log(user)
         res['male'] = res['male'] || []
         res['female'] = res['female'] || []
 
@@ -60,8 +70,64 @@ const getAll = function*() {
     }, {})
 
 
-    this.set('Content-Type', 'application/json')
-    this.body = JSON.stringify(results, null, 4)
+    console.log('responseType:', responseType, responseType === undefined)
+
+    switch (responseType) {
+        case EXCEL_FILE_SUFFIX:
+            return renderExcelFile(results)
+            break;
+        default:
+            this.set('Content-Type', 'application/json')
+            this.body = JSON.stringify(results, null, 4)
+            break;
+
+    }
+
+    // this.set('Content-Type', 'application/json')
+    // this.body = JSON.stringify(results, null, 4)
+
 }
+
+
+const renderExcelFile = (results) => {
+
+    return new Promise((resolve, reject) => {
+
+        var workbook = new Excel.Workbook();
+        workbook.creator = 'Progic.se';
+        workbook.lastModifiedBy = 'Progic.se';
+        workbook.created = new Date();
+        workbook.modified = new Date();
+
+        var worksheet = workbook.addWorksheet('Resultat');
+        worksheet.columns = [
+            { header: 'startnummer', key: 'start_nbr', width: 12 },
+            { header: 'Förnamn', key: 'firstname', width: 20 },
+            { header: 'Efternamn', key: 'lastname', width: 30 },
+            { header: 'sluttid', key: 'endTime', width: 12 },
+            { header: 'netto', key: 'netTime', width: 12 },
+            { header: 'kön', key: 'gender', width: 8 }
+        ];
+
+        results.male.forEach((p) => {
+            worksheet.addRow({start_nbr: p.startNbr, firstname: p.firstname, lastname: p.lastname, endTime: p.endTime, netTime: p.netTime, gender: p.gender});
+        })
+
+        results.female.forEach((p) => {
+            worksheet.addRow({start_nbr: p.startNbr, firstname: p.firstname, lastname: p.lastname, endTime: p.endTime, netTime: p.netTime, gender: p.gender});
+        })
+
+        workbook.xlsx.writeFile('results.xlsx')
+        .then(function() {
+            console.log('done')
+
+            resolve(fs.createReadStream('results.xlsx'))
+
+        })
+    })
+
+
+}
+
 
 module.exports = init

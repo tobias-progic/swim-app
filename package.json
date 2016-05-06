@@ -12,6 +12,7 @@
     "babel-preset-react": "^6.5.0",
     "csv": "^0.4.6",
     "csv-parse": "^1.0.4",
+    "exceljs": "^0.2.7",
     "jquery": "^2.2.1",
     "kcors": "^1.1.0",
     "koa": "^1.1.2",

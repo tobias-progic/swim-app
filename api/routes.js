@@ -20,7 +20,8 @@ const routes = {
     'put /api/1/races/:id': 'RaceController.setup',
     'put /api/1/races/:id/finished': 'RaceController.finishRace',
     'delete /api/1/races/:id': 'RaceController.reset',
-    'get /api/1/results': 'ResultsController.get'
+    'get /api/1/results': 'ResultsController.get',
+    'get /api/1/results.xlsx': 'ResultsController.getExcel'
 }
 
 
