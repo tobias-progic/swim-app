@@ -88,16 +88,28 @@ const setFinished = function*(id) {
     let sql = `UPDATE race SET \`finished\` = 1 WHERE id = ${id}`
     let res = yield queryDatabase(sql)
     let ok = (res.affectedRows && res.affectedRows != 0)
+    yield backupRace()
     this.set('Content-Type', 'application/json')
     this.status = (ok != 0) ? 200 : 404
 }
 
 /*
     Backup data after race is finished
-
-    CREATE TABLE race_backup LIKE race;
-    INSERT race_backup SELECT * FROM race;
 */
+const backupRace = function*() {
+    let sql = "DROP TABLE IF EXISTS `user_backup`;"
+    yield queryDatabase(sql)
+    sql = "DROP TABLE IF EXISTS `heat_backup`;"
+    yield queryDatabase(sql)
+    sql = "CREATE TABLE race_backup LIKE race;"
+    yield queryDatabase(sql)
+    sql = "INSERT race_backup SELECT * FROM race;"
+    yield queryDatabase(sql)
+    sql = "CREATE TABLE user_backup SELECT * FROM user;"
+    yield queryDatabase(sql)
+    sql = "INSERT user_backup SELECT * FROM user;"
+    yield queryDatabase(sql)
+}
 
 
 module.exports = init
