@@ -73,7 +73,7 @@ const reset = function*(id) {
     sql = `UPDATE user SET \`tag_nbr\` = NULL, \`end_time\` = NULL WHERE 1`
 
     if (keepTags) {
-        sql = `UPDATE user \`end_time\` = NULL WHERE 1`
+        sql = `UPDATE user SET \`end_time\` = NULL WHERE 1`
     }
 
 
