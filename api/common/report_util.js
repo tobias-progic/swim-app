@@ -14,8 +14,8 @@ const renderExcelFile = (results, filename) => {
         var worksheet = workbook.addWorksheet('Resultat');
         worksheet.columns = [
             { header: 'startnummer', key: 'start_nbr', width: 12 },
-            { header: 'Förnamn', key: 'firstname', width: 20 },
-            { header: 'Efternamn', key: 'lastname', width: 30 },
+            { header: 'förnamn', key: 'firstname', width: 20 },
+            { header: 'efternamn', key: 'lastname', width: 30 },
             { header: 'sluttid', key: 'endTime', width: 12 },
             { header: 'netto', key: 'netTime', width: 12 },
             { header: 'kön', key: 'gender', width: 8 }

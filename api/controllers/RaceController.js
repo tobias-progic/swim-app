@@ -10,13 +10,16 @@
 // PUT för tag
 
 const moment = require('moment')
+const resultsUtil = require('../common/results_util.js')
+const reportUtil = require('../common/report_util.js')
 
 let logger
+let config
 let queryDatabase
 
 const init = (common) => {
 
-    let config = common.config
+    config = common.config
     logger = common.logger
 
     queryDatabase = require('../common/db_util').create(config, logger)
@@ -115,7 +118,7 @@ const setFinished = function*(id) {
 const backupRace = function*() {
     let sql = "DROP TABLE IF EXISTS `user_backup`;"
     yield queryDatabase(sql)
-    sql = "DROP TABLE IF EXISTS `heat_backup`;"
+    sql = "DROP TABLE IF EXISTS `race_backup`;"
     yield queryDatabase(sql)
     sql = "CREATE TABLE race_backup LIKE race;"
     yield queryDatabase(sql)
@@ -125,6 +128,13 @@ const backupRace = function*() {
     yield queryDatabase(sql)
     sql = "INSERT user_backup SELECT * FROM user;"
     yield queryDatabase(sql)
+    let results = yield resultsUtil.getResults(config, logger)
+
+    let thisMoment = moment(new Date())
+    thisMoment.locale('sv')
+
+    let backupFileName = thisMoment.format('L') + '.xlsx'
+    reportUtil.renderExcelFile(results, backupFileName)
 }
 
 
