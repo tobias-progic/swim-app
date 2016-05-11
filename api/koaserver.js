@@ -22,6 +22,8 @@ const server = (config, logger, staticServe) => {
     app.use(jsonBody({ limit: '500kb' }))
     app.use(koaLogger())
 
+    app.context.db = require('./common/db_util').create(config, logger)
+
     const inject = {config,logger}
     routes(inject, app)
 
