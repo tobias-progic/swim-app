@@ -38,12 +38,27 @@ const getAll = function*() {
 
 const setup = function*(id) {
 
+    let sql
+
+    // safeguard against accidental re-setup of the race
+
+    // sql = 'select basetime from race where basetime <> -1'
+    sql = 'select basetime from race where id = 1'
+    let safeguard = yield queryDatabase(sql)
+    // logger.silly("safeguard")
+    // logger.silly(JSON.stringify(safeguard))
+
+    if (safeguard[0].basetime != -1) {
+        this.status = 403
+        return
+    }
+
+
+
     const basetime = this.request.body.basetime || undefined
     const heat1 = this.request.body.heat1 || undefined
     const heat2 = this.request.body.heat2 || undefined
     const heat3 = this.request.body.heat3 || undefined
-
-    let sql
 
     if (basetime === undefined) {
         sql = `UPDATE race SET \`heat1\` = '${heat1}', \`heat2\` = '${heat2}', \`heat3\` = '${heat3}' WHERE id = ${id};`
@@ -66,7 +81,8 @@ const reset = function*(id) {
 
     logger.silly('keepTags', keepTags)
 
-    let sql = `UPDATE race SET \`basetime\` = NULL, \`heat1\` = NULL, \`heat2\` = NULL, \`heat3\` = NULL, \`finished\` = 0 WHERE id = ${id}`
+    // let sql = `UPDATE race SET \`basetime\` = NULL, \`heat1\` = NULL, \`heat2\` = NULL, \`heat3\` = NULL, \`finished\` = 0 WHERE id = ${id}`
+    let sql = `UPDATE race SET \`basetime\` = -1, \`heat1\` = 0, \`heat2\` = 0, \`heat3\` = 0, \`finished\` = 0 WHERE id = ${id}`
     let res = yield queryDatabase(sql)
     let ok = (res.affectedRows && res.affectedRows != 0)
 
