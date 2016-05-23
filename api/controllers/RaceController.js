@@ -52,29 +52,27 @@ const setup = function*(id) {
     // logger.silly(JSON.stringify(safeguard))
 
     if (safeguard[0].basetime != -1) {
+        this.set('Content-Type', 'application/json')
         this.status = 403
-        return
-    }
-
-
-
-    const basetime = this.request.body.basetime || undefined
-    const heat1 = this.request.body.heat1 || undefined
-    const heat2 = this.request.body.heat2 || undefined
-    const heat3 = this.request.body.heat3 || undefined
-
-    if (basetime === undefined) {
-        sql = `UPDATE race SET \`heat1\` = '${heat1}', \`heat2\` = '${heat2}', \`heat3\` = '${heat3}' WHERE id = ${id};`
     } else {
-        sql = `UPDATE race SET \`basetime\` = '${basetime}', \`finished\` = 0 WHERE id = ${id};`
+        const basetime = this.request.body.basetime || undefined
+        const heat1 = this.request.body.heat1 || undefined
+        const heat2 = this.request.body.heat2 || undefined
+        const heat3 = this.request.body.heat3 || undefined
+
+        if (basetime === undefined) {
+            sql = `UPDATE race SET \`heat1\` = '${heat1}', \`heat2\` = '${heat2}', \`heat3\` = '${heat3}' WHERE id = ${id};`
+        } else {
+            sql = `UPDATE race SET \`basetime\` = '${basetime}', \`finished\` = 0 WHERE id = ${id};`
+        }
+
+        let res = yield queryDatabase(sql)
+        this.set('Content-Type', 'application/json')
+        this.body = JSON.stringify({msg: "updated race", id: res.insertId}, null, 4);
+        console.log(res);
+        this.status = (res.affectedRows && res.affectedRows !== 0) ? 200 : 400
+
     }
-
-    let res = yield queryDatabase(sql)
-    this.set('Content-Type', 'application/json')
-    this.body = JSON.stringify({msg: "updated race", id: res.insertId}, null, 4);
-    console.log(res);
-    this.status = (res.affectedRows && res.affectedRows !== 0) ? 200 : 400
-
 
 }
 
@@ -133,7 +131,7 @@ const backupRace = function*() {
     let thisMoment = moment(new Date())
     thisMoment.locale('sv')
 
-    let backupFileName = thisMoment.format('L') + '.xlsx'
+    let backupFileName = thisMoment.format('YYYY-MM-DD_h:mm:ss') + '.xlsx'
     reportUtil.renderExcelFile(results, backupFileName)
 }
 
