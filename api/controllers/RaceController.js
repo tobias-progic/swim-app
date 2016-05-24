@@ -51,14 +51,17 @@ const setup = function*(id) {
     // logger.silly("safeguard")
     // logger.silly(JSON.stringify(safeguard))
 
-    if (safeguard[0].basetime != -1) {
+    const basetime = this.request.body.basetime || undefined
+    const heat1 = this.request.body.heat1 || undefined
+    const heat2 = this.request.body.heat2 || undefined
+    const heat3 = this.request.body.heat3 || undefined
+
+    if (safeguard[0].basetime != -1 && basetime !== undefined) {
+
         this.set('Content-Type', 'application/json')
         this.status = 403
+
     } else {
-        const basetime = this.request.body.basetime || undefined
-        const heat1 = this.request.body.heat1 || undefined
-        const heat2 = this.request.body.heat2 || undefined
-        const heat3 = this.request.body.heat3 || undefined
 
         if (basetime === undefined) {
             sql = `UPDATE race SET \`heat1\` = '${heat1}', \`heat2\` = '${heat2}', \`heat3\` = '${heat3}' WHERE id = ${id};`
