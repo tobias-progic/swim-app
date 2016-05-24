@@ -45,13 +45,19 @@ const mapResults = function*(config, logger) {
 
     if (genderMapped['female']) {
         femaleUsers = genderMapped['female'].sort((a,b) => {
-            return a.netTime > b.netTime;
+            if (a.netTime === b.netTime) {
+                return 0;
+            }
+            return a.netTime < b.netTime ? -1 : 1
         })
     }
 
     if (genderMapped['male']) {
         maleUsers = genderMapped['male'].sort((a,b) => {
-            return a.netTime > b.netTime;
+            if (a.netTime === b.netTime) {
+                return 0;
+            }
+            return a.netTime < b.netTime ? -1 : 1
         })
     }
 
