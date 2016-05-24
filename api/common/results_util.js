@@ -33,11 +33,35 @@ const mapResults = function*(config, logger) {
             res['male'].push(user)
         }
         if (user.gender === 'female') {
-            res["female"].push(user)
+            res['female'].push(user)
         }
         return res
 
     }, {})
+
+    let femaleUsers
+    let maleUsers
+
+
+    if (genderMapped['female']) {
+        femaleUsers = genderMapped['female'].sort((a,b) => {
+            return a.netTime < b.netTime;
+        })
+    }
+
+    if (genderMapped['male']) {
+        maleUsers = genderMapped['male'].sort((a,b) => {
+            return a.netTime < b.netTime;
+        })
+    }
+
+
+
+    return {
+        male: maleUsers,
+        female: femaleUsers
+    }
+
 }
 
 module.exports = {
