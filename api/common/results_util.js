@@ -16,7 +16,7 @@ const mapResults = function*(config, logger) {
         '3': races[0].heat3
     }
 
-    return users.map( (user) => {
+    let genderMapped = users.map( (user) => {
         return {
             startNbr: user.start_nbr,
             firstname: user.firstname,
@@ -45,6 +45,7 @@ const mapResults = function*(config, logger) {
 
     if (genderMapped['female']) {
         femaleUsers = genderMapped['female'].sort((a,b) => {
+
             if (a.netTime === b.netTime) {
                 return 0;
             }
@@ -54,6 +55,7 @@ const mapResults = function*(config, logger) {
 
     if (genderMapped['male']) {
         maleUsers = genderMapped['male'].sort((a,b) => {
+
             if (a.netTime === b.netTime) {
                 return 0;
             }
