@@ -5,17 +5,11 @@ const moment = require('moment')
 
 const reportUtil = require('../common/report_util.js')
 const resultsUtil = require('../common/results_util.js')
-const parse = require('co-busboy')
+// const parse = require('co-busboy')
 const fs = require('fs')
 const excelFileParser = require('../common/excelFileParser.js')
 
 let queryDatabase
-
-// function getSqlUserObj(id) {
-//     return `SELECT user.id, firstname, lastname, start_nbr AS startNbr, heat_id AS heatNbr, end_time AS endTime, tag_nbr AS tagNbr FROM user WHERE user.id = ${id}`
-// }
-
-
 let config
 let logger
 
@@ -42,19 +36,7 @@ const upload = function*(req) {
             return
         }
 
-        logger.silly('parsing form data', this)
-
-        // multipart upload
-        var parts = parse(this);
-        var part;
-
-        while (part = yield parts) {
-            var stream = fs.createWriteStream(PARTICIPANTS_FILE);
-            part.pipe(stream);
-            logger.silly('uploading %s -> %s', part.filename, stream.path);
-        }
-
-        logger.silly('parsing uploaded file')
+        logger.silly('parsing uploaded file', PARTICIPANTS_FILE)
 
         let result = yield excelFileParser.parse(PARTICIPANTS_FILE)
 
