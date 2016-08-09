@@ -57,7 +57,7 @@ const upload = function*(req) {
         let dbResult = yield queryDatabase(truncateUsers)
         logger.silly(dbResult)
 
-        let insertUsers = 'INSERT INTO USER(`start_nbr`,`firstname`,`lastname`) VALUES' + sqlValues
+        let insertUsers = 'INSERT INTO user(`start_nbr`,`firstname`,`lastname`) VALUES' + sqlValues
         logger.silly(insertUsers)
 
         dbResult = yield queryDatabase(insertUsers)
