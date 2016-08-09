@@ -18,14 +18,13 @@ const cors = require('kcors')
 // koa server entry point
 const server = (config, logger, staticServe) => {
 
-    // app.use(bodyParser())
     app.use(cors({
         origin: '*'
     }))
 
     app.use(koaLogger())
 
-    app.use(bodyParser())
+    app.use(bodyParser({strict: true, enableTypes:'json'}))
 
     // app.use(jsonBody({
     //     limit: '500kb'
@@ -46,23 +45,6 @@ const server = (config, logger, staticServe) => {
     })
 
     app.use(serve(staticServe.root))
-
-    // app.use(function*(next) {
-    //     // ignore non-POSTs
-    //     if ('POST' != this.method) return yield next;
-
-    //     // multipart upload
-    //     var parts = parse(this);
-    //     var part;
-
-    //     while (part = yield parts) {
-    //         var stream = fs.createWriteStream(path.join(os.tmpdir(), Math.random().toString()));
-    //         part.pipe(stream);
-    //         logger.silly('uploading %s -> %s', part.filename, stream.path);
-    //     }
-
-    //     this.redirect('/');
-    // });
 
     return app
 
