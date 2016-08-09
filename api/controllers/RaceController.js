@@ -5,10 +5,6 @@
 
 "use strict";
 
-// Join tag och heat
-// POST för tag
-// PUT för tag
-
 const moment = require('moment')
 const resultsUtil = require('../common/results_util.js')
 const reportUtil = require('../common/report_util.js')
@@ -48,8 +44,6 @@ const setup = function*(id) {
     // sql = 'select basetime from race where basetime <> -1'
     sql = 'select basetime from race where id = 1'
     let safeguard = yield queryDatabase(sql)
-    // logger.silly("safeguard")
-    // logger.silly(JSON.stringify(safeguard))
 
     const basetime = this.request.body.basetime || undefined
     const heat1 = this.request.body.heat1 || undefined
@@ -100,7 +94,6 @@ const reset = function*(id) {
     res = yield queryDatabase(sql)
     ok &= (res.affectedRows && res.affectedRows != 0)
     this.set('Content-Type', 'application/json')
-    // this.body = JSON.stringify(res, null, 4)
     this.status = (ok != 0) ? 200 : 404
 }
 

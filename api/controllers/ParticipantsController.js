@@ -105,11 +105,11 @@ const update = function*(id) {
         return
     }
 
-    // console.log('body', this.request.body)
+    console.log('body', this.request.body)
 
     let sql = "update user " + dbUtil.objectToSql(this.request.body) + ` where id = ${id}`;
 
-    // console.log('*** sql', sql)
+    console.log('*** sql', sql)
 
     let res = yield queryDatabase(sql)
     res = yield queryDatabase(getSqlUserObj(id))

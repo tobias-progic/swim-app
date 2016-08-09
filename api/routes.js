@@ -8,6 +8,7 @@
 "use strict";
 
 const _ = require('koa-route')
+const jsonBody = require('koa-json-body')
 
 // add your routes specifications here
 const routes = {
@@ -21,7 +22,8 @@ const routes = {
     'put /api/1/races/:id/finished': 'RaceController.finishRace',
     'delete /api/1/races/:id': 'RaceController.reset',
     'get /api/1/results': 'ResultsController.get',
-    'get /api/1/results.xlsx': 'ResultsController.getExcel'
+    'get /api/1/results.xlsx': 'ResultsController.getExcel',
+    'post /api/1/participants/file': 'FileController.uploadParticipants'
 }
 
 
@@ -42,7 +44,15 @@ const mount = (common, app) => {
         let handler = ctrl[handlerFunc[1]]
 
         common.logger.silly(`adding handler for ${method} at ${route} using ${handlerFunc[0]}.${handlerFunc[1]}`)
+
+        // if (null === route.match('file')) {
+        //     app.use(jsonBody({
+        //         limit: '500kb'
+        //     }))
+        // }
+
         app.use(_[method](route, handler))
+
 
     })
 
