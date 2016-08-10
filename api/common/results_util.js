@@ -26,15 +26,20 @@ const mapResults = function*(config, logger) {
             gender: user.gender
         }
     }).reduce((res, user) => {
-        res['male'] = res['male'] || []
-        res['female'] = res['female'] || []
+        // res['male'] = res['male'] || []
+        // res['female'] = res['female'] || []
 
-        if (user.gender === 'male') {
-            res['male'].push(user)
-        }
-        if (user.gender === 'female') {
-            res['female'].push(user)
-        }
+        // if (user.gender === 'male') {
+        //     res['male'].push(user)
+        // }
+        // if (user.gender === 'female') {
+        //     res['female'].push(user)
+        // }
+        // return res
+
+        res.all = res.all || []
+        res.all.push(user)
+
         return res
 
     }, {})
@@ -64,11 +69,12 @@ const mapResults = function*(config, logger) {
     }
 
 
+    return genderMapped
 
-    return {
-        male: maleUsers,
-        female: femaleUsers
-    }
+    // return {
+    //     male: maleUsers,
+    //     female: femaleUsers
+    // }
 
 }
 
